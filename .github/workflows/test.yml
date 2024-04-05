@@ -1,0 +1,33 @@
+name: Testing
+
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  AWS_DEFAULT_REGION: ap-southeast-2
+  AWS_ACCOUNT_ID: 464960403606
+
+concurrency:
+  group: test
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: development
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+
+        - name: Authenticate with AWS
+          uses: aws-actions/configure-aws-credentials@v3
+          with: 
+            aws-region: ${{ env.AWS_DEFAULT_REGION }}
+            role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/fire-calculator-infra-oidc-role
