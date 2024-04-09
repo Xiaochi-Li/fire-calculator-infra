@@ -19,7 +19,7 @@ jobs:
     environment: development
     strategy:
       matrix:
-        TF_VAR_aws_region: [ "ap-southeast-2" , "ap-southeast-4"]
+        TF_VAR_aws_region: [ "ap-southeast-2" ]
     env:
       TF_VAR_aws_region: ${{ matrix.TF_VAR_aws_region }}
     permissions:
