@@ -24,6 +24,6 @@ module "subnets" {
   aws_region        = var.aws_region
   application_name  = var.application_name
   envrionment       = var.envrionment
-  availability_zone = local.availability_zone_names[(count.index / 2) % local.availability_zone_count]
+  availability_zone = local.availability_zone_names[div(count.index, 2) % local.availability_zone_count]
   vpc_id            = aws_vpc.VPCs[count.index].id
 }
