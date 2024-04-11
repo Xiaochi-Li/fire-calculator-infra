@@ -23,10 +23,9 @@ locals {
 module "VPC_Sydney" {
   source = "../../../modules/VPC"
 
-  number_of_availability_zones = 3
-  aws_region                   = var.aws_region
-  envrionment                  = local.envrionment
-  application_name             = local.application_name
+  aws_region       = var.aws_region
+  envrionment      = local.envrionment
+  application_name = local.application_name
   vpc_cidr_blocks = [
     "11.16.0.0/16",
     "11.17.0.0/16",
