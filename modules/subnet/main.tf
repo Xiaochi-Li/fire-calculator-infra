@@ -10,8 +10,8 @@ resource "aws_subnet" "subnets" {
   count = length(local.subnet_names)
 
   vpc_id                          = var.vpc_id
-  cidr_block                      = cidrsubnet(data.aws_vpc.selected.cidr_block, 4, count.index)
-  ipv6_cidr_block                 = cidrsubnet(data.aws_vpc.selected.ipv6_cidr_block, 8, count.index)
+  cidr_block                      = cidrsubnet(data.aws_vpc.selected.cidr_block, 2, count.index)
+  ipv6_cidr_block                 = cidrsubnet(data.aws_vpc.selected.ipv6_cidr_block, 4, count.index)
   assign_ipv6_address_on_creation = true
 
   availability_zone       = var.availability_zone
