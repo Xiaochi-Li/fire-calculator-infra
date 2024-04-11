@@ -1,0 +1,64 @@
+name: CD
+
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  AWS_ACCOUNT_ID: 464960403606
+
+concurrency:
+  group: CD-workflow
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    environment: development
+    strategy:
+      matrix:
+        TF_VAR_aws_region: [ "ap-southeast-2" ]
+    env:
+      TF_VAR_aws_region: ${{ matrix.TF_VAR_aws_region }}
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: apps/development-envrionment/${{ env.TF_VAR_aws_region }}
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+
+        # - name: Print File Structure
+        #   run: |
+        #     ls /home/runner/work/fire-calculator-infra/fire-calculator-infra/./apps/development-environment/ap-southeast-2
+
+        - name: Authenticate with AWS
+          uses: aws-actions/configure-aws-credentials@v3
+          with: 
+            aws-region: ${{ env.TF_VAR_aws_region }}
+            role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/fire-calculator-infra-oidc-role
+
+        - name: Set up Terraform
+          uses: hashicorp/setup-terraform@v3
+          with:
+            cli_config_credentials_token: ${{ secrets.TF_CLOUD_TOKEN }}
+
+        - name: Terraform Initialization
+          run: |
+            terraform init
+
+        - name: Terraform Validate
+          run: |
+            terraform validate
+
+        - name: Terraform Plan
+          run: |
+            terraform plan
+
+        - name: Terraform Apply
+          run: |
+            terraform apply -auto-approve

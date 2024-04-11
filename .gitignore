@@ -1,0 +1,10 @@
+
+# Local Terraform directories
+**/.terraform/
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# local env files
+**/local_env.sh
