@@ -1,0 +1,1 @@
+In each Given VPC, creating ["web", "app", "db", "reserved"] subnets. where "web" is public, traffic routes to an internet gateway, and a NAT gateway sits in "web". "app","db","reserved" are all private where traffic route to the NAT gateway.

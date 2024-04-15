@@ -1,6 +1,5 @@
 locals {
-  public_subnets  = [for sn in aws_subnet.subnets : sn.id if sn.map_public_ip_on_launch]
-  private_subnets = [for sn in aws_subnet.subnets : sn.id if !sn.map_public_ip_on_launch]
+  public_subnet = [for sn in aws_subnet.subnets : sn.id if sn.map_public_ip_on_launch][0]
 }
 
 resource "aws_route_table" "public" {
@@ -17,12 +16,18 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "rt-public-${var.application_name}-${var.envrionment}"
+    Name = "rt-public-${var.application_name}-${var.envrionment}-${var.aws_region}"
   }
 }
 
 resource "aws_route_table_association" "public" {
-  count          = length(local.public_subnets)
-  subnet_id      = local.public_subnets[count.index]
+  subnet_id      = local.public_subnet
   route_table_id = aws_route_table.public.id
+}
+
+resource "aws_nat_gateway" "nat" {
+  subnet_id = local.public_subnet
+  tags = {
+    Name = "nat-${var.application_name}-${var.envrionment}-${var.aws_region}"
+  }
 }
