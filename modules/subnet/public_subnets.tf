@@ -25,8 +25,18 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
+resource "aws_eip" "nat_eip" {
+  domain = "vpc"
+
+  tags = {
+    Name = "nat-eip-${var.application_name}-${var.envrionment}-${var.aws_region}"
+  }
+}
+
 resource "aws_nat_gateway" "nat" {
-  subnet_id = local.public_subnet
+  subnet_id     = local.public_subnet
+  allocation_id = aws_eip.nat_eip.id
+
   tags = {
     Name = "nat-${var.application_name}-${var.envrionment}-${var.aws_region}"
   }
