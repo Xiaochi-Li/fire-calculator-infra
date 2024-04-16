@@ -10,11 +10,6 @@ resource "aws_route_table" "private" {
     nat_gateway_id = aws_nat_gateway.nat.id
   }
 
-  route {
-    ipv6_cidr_block = "::/0"
-    nat_gateway_id  = aws_nat_gateway.nat.id
-  }
-
   tags = {
     Name = "rt-private-${var.application_name}-${var.envrionment}-${var.aws_region}"
   }
