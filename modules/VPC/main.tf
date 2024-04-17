@@ -18,12 +18,22 @@ resource "aws_vpc" "VPCs" {
   }
 }
 
+resource "aws_internet_gateway" "gw" {
+  count  = length(aws_vpc.VPCs)
+  vpc_id = aws_vpc.VPCs[count.index].id
+
+  tags = {
+    Name = "igw-${var.application_name}-${var.envrionment}-${count.index}"
+  }
+}
+
 module "subnets" {
-  count             = length(aws_vpc.VPCs)
-  source            = "../subnet"
-  aws_region        = var.aws_region
-  application_name  = var.application_name
-  envrionment       = var.envrionment
-  availability_zone = local.availability_zone_names[floor(count.index / 2) % local.availability_zone_count]
-  vpc_id            = aws_vpc.VPCs[count.index].id
+  count               = length(aws_vpc.VPCs)
+  source              = "../subnet"
+  aws_region          = var.aws_region
+  application_name    = var.application_name
+  envrionment         = var.envrionment
+  availability_zone   = local.availability_zone_names[count.index % local.availability_zone_count]
+  vpc_id              = aws_vpc.VPCs[count.index].id
+  internet_gateway_id = aws_internet_gateway.gw[count.index].id
 }

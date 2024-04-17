@@ -1,5 +1,5 @@
 variable "aws_region" {
-  description = "The region to deploy the VPC"
+  description = "The region to deploy the subnets"
   type        = string
 }
 
@@ -9,16 +9,21 @@ variable "application_name" {
 }
 
 variable "envrionment" {
-  description = "The environment to deploy the VPC"
+  description = "The environment"
   type        = string
 }
 
 variable "vpc_id" {
-  description = "value of the VPC CIDR"
+  description = "The ID of the VPC to deploy the Subnets"
   type        = string
 }
 
 variable "availability_zone" {
-  description = "value of the availability zone"
+  description = "The availability zone to deploy the Subnets"
+  type        = string
+}
+
+variable "internet_gateway_id" {
+  description = "The ID of the internet gateway that will be targeted by public subnets"
   type        = string
 }
