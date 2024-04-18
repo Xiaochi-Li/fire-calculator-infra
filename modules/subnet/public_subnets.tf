@@ -1,5 +1,5 @@
 locals {
-  public_subnet = [for sn in aws_subnet.subnets : sn.id if sn.map_public_ip_on_launch][0]
+  public_subnet = [for sn in aws_subnet.main : sn.id if sn.map_public_ip_on_launch][0]
 }
 
 resource "aws_route_table" "public" {
@@ -33,7 +33,7 @@ resource "aws_eip" "nat_eip" {
   }
 }
 
-resource "aws_nat_gateway" "nat" {
+resource "aws_nat_gateway" "main" {
   subnet_id     = local.public_subnet
   allocation_id = aws_eip.nat_eip.id
 

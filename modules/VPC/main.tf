@@ -7,7 +7,7 @@ locals {
   availability_zone_count = length(local.availability_zone_names)
 }
 
-resource "aws_vpc" "VPCs" {
+resource "aws_vpc" "main" {
   count                            = length(var.vpc_cidr_blocks)
   cidr_block                       = var.vpc_cidr_blocks[count.index]
   enable_dns_support               = true
@@ -18,9 +18,9 @@ resource "aws_vpc" "VPCs" {
   }
 }
 
-resource "aws_internet_gateway" "gw" {
-  count  = length(aws_vpc.VPCs)
-  vpc_id = aws_vpc.VPCs[count.index].id
+resource "aws_internet_gateway" "main" {
+  count  = length(aws_vpc.main)
+  vpc_id = aws_vpc.main[count.index].id
 
   tags = {
     Name = "igw-${var.application_name}-${var.envrionment}-${count.index}"
@@ -28,12 +28,12 @@ resource "aws_internet_gateway" "gw" {
 }
 
 module "subnets" {
-  count               = length(aws_vpc.VPCs)
+  count               = length(aws_vpc.main)
   source              = "../subnet"
   aws_region          = var.aws_region
   application_name    = var.application_name
   envrionment         = var.envrionment
   availability_zone   = local.availability_zone_names[count.index % local.availability_zone_count]
-  vpc_id              = aws_vpc.VPCs[count.index].id
-  internet_gateway_id = aws_internet_gateway.gw[count.index].id
+  vpc_id              = aws_vpc.main[count.index].id
+  internet_gateway_id = aws_internet_gateway.main[count.index].id
 }

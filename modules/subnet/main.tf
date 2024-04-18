@@ -6,7 +6,7 @@ locals {
   subnet_names = ["web", "app", "db", "reserved"]
 }
 
-resource "aws_subnet" "subnets" {
+resource "aws_subnet" "main" {
   count = length(local.subnet_names)
 
   vpc_id                          = var.vpc_id
