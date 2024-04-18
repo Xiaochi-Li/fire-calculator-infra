@@ -1,8 +1,7 @@
 variable "vpc_cidr_blocks" {
-  description = "The CIDR block for the VPC"
+  description = "a list of CIDR blocks, each representing a VPC to create"
   type        = list(string)
 }
-
 
 variable "aws_region" {
   description = "The region to deploy the VPC"
