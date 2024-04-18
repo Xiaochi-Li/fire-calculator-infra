@@ -2,9 +2,11 @@ name: VPC Deployment
 
 on:
   workflow_dispatch:
-
-env:
-  AWS_ACCOUNT_ID: 464960403606
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'development'
 
 concurrency:
   group: CD-workflow
@@ -12,7 +14,7 @@ concurrency:
 jobs:
   deployment:
     runs-on: ubuntu-latest
-    environment: development
+    environment: ${{ inputs.environment }}
     strategy:
       matrix:
         TF_VAR_aws_region: [ "ap-southeast-2" ]
@@ -36,7 +38,7 @@ jobs:
           uses: aws-actions/configure-aws-credentials@v3
           with: 
             aws-region: ${{ env.TF_VAR_aws_region }}
-            role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/fire-calculator-infra-oidc-role
+            role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/fire-calculator-infra-oidc-role
 
         - name: Set up Terraform
           uses: hashicorp/setup-terraform@v3
