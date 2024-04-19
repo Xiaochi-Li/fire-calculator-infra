@@ -1,5 +1,5 @@
 locals {
-  private_subnets = [for sn in aws_subnet.subnets : sn.id if !sn.map_public_ip_on_launch]
+  private_subnets = [for sn in aws_subnet.main : sn.id if !sn.map_public_ip_on_launch]
 }
 
 resource "aws_route_table" "private" {
@@ -7,7 +7,7 @@ resource "aws_route_table" "private" {
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat.id
+    nat_gateway_id = aws_nat_gateway.main.id
   }
 
   tags = {
