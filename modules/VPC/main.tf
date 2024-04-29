@@ -1,7 +1,3 @@
-data "aws_availability_zones" "available" {
-  state = "available"
-}
-
 locals {
   availability_zone_names = data.aws_availability_zones.available.names
   availability_zone_count = length(local.availability_zone_names)

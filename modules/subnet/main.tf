@@ -1,7 +1,3 @@
-data "aws_vpc" "selected" {
-  id = var.vpc_id
-}
-
 locals {
   subnet_names = ["web", "app", "db", "reserved"]
 }
