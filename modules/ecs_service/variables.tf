@@ -14,3 +14,13 @@ variable "envrionment" {
   type        = string
 
 }
+
+variable "cluster_arn" {
+  description = "The ARN of the ECS cluster"
+  type        = string
+}
+
+variable "task_definition_arn" {
+  description = "The ARN of the ECS task definition"
+  type        = string
+}

@@ -21,7 +21,6 @@ module "VPC_Sydney" {
 
 module "ECS" {
   source = "../../../modules/ECS"
-  count  = length(local.vpc_cidr_blocks)
 
   aws_region       = var.aws_region
   memory           = 2048

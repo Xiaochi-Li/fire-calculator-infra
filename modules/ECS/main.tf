@@ -29,24 +29,14 @@ resource "aws_ecs_task_definition" "main" {
   }])
 }
 
-resource "aws_security_group" "ecs" {
-  name        = "${var.application_name}-${var.envrionment}-sg"
-  description = "Example security group"
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["104.30.135.68/32"]
-  }
-}
 
 module "ecs_service" {
-  source = "../../../modules/ecs_service"
+  source = "../ecs_service"
   count  = length(var.vpc_ids)
 
-  application_name = var.application_name
-  envrionment      = var.envrionment
-  vpc_id           = var.vpc_ids[count.index]
-
+  application_name    = var.application_name
+  envrionment         = var.envrionment
+  vpc_id              = var.vpc_ids[count.index]
+  cluster_arn         = aws_ecs_cluster.main.arn
+  task_definition_arn = aws_ecs_task_definition.main.arn
 }
