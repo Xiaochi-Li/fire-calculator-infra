@@ -13,8 +13,8 @@ module "VPC_Sydney" {
   application_name = local.application_name
   vpc_cidr_blocks = [
     "11.16.0.0/16",
-    "11.17.0.0/16",
-    "11.18.0.0/16"
+    # "11.17.0.0/16",
+    # "11.18.0.0/16"
   ]
 }
 
