@@ -39,4 +39,5 @@ module "ecs_service" {
   vpc_id              = var.vpc_ids[count.index]
   cluster_arn         = aws_ecs_cluster.main.arn
   task_definition_arn = aws_ecs_task_definition.main.arn
+  index               = count.index
 }

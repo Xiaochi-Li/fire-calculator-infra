@@ -24,3 +24,9 @@ variable "task_definition_arn" {
   description = "The ARN of the ECS task definition"
   type        = string
 }
+
+variable "index" {
+  description = "The index of the ECS service"
+  type        = number
+
+}

@@ -3,7 +3,8 @@ locals {
 }
 
 resource "aws_security_group" "ecs" {
-  name        = "${var.application_name}-${var.envrionment}-sg"
+  name        = "${var.application_name}-${var.envrionment}-sg-${var.index}"
+  vpc_id      = var.vpc_id
   description = "Example security group"
 
   ingress {
