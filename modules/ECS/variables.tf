@@ -33,3 +33,8 @@ variable "aws_region" {
   description = "The region to deploy the ECS cluster"
   type        = string
 }
+
+variable "vpc_id" {
+  description = "The VPC ID"
+  type        = string
+}

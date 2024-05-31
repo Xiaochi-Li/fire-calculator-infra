@@ -18,6 +18,11 @@ output "public_subnets" {
   value       = module.subnets[*].public_subnets
 }
 
+output "private_subnets" {
+  description = "value of private subnets"
+  value       = module.subnets[*].private_subnets
+}
+
 output "nat_gateway_id" {
   description = "value of nat gateway id"
   value       = module.subnets[*].nat_gateway_id

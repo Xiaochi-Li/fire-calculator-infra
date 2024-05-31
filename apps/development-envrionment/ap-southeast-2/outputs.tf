@@ -7,3 +7,8 @@ output "public_subnets" {
   description = "value of public subnets"
   value       = module.VPC_Sydney.public_subnets
 }
+
+output "private_subnets" {
+  description = "value of private subnets"
+  value       = module.VPC_Sydney.private_subnets
+}
