@@ -30,5 +30,5 @@ module "ECS" {
   container_image  = "xiaochilidevops/fire-calculator-api:latest"
   envrionment      = local.envrionment
   application_name = local.application_name
-  vpc_id           = module.VPC_Sydney.vpc_id[count.index]
+  vpc_ids          = module.VPC_Sydney.vpc_ids
 }

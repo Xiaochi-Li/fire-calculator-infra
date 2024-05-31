@@ -34,7 +34,7 @@ variable "aws_region" {
   type        = string
 }
 
-variable "vpc_id" {
+variable "vpc_ids" {
   description = "The VPC ID"
-  type        = string
+  type        = list(string)
 }
