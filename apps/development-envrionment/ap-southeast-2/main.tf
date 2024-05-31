@@ -17,3 +17,15 @@ module "VPC_Sydney" {
     "11.18.0.0/16"
   ]
 }
+
+module "ECS" {
+  source = "../../../modules/ECS"
+
+  aws_region       = var.aws_region
+  memory           = 2048
+  cpu              = 1024
+  container_port   = 8241
+  container_image  = "xiaochilidevops/fire-calculator-api:latest"
+  envrionment      = local.envrionment
+  application_name = local.application_name
+}
