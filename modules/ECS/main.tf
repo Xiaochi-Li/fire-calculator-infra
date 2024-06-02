@@ -1,12 +1,18 @@
-
-
-resource "aws_cloudwatch_log_group" "main" {
-  name = "${var.application_name}-${var.envrionment}-lg"
-}
-
 resource "aws_ecs_cluster" "main" {
   name = "${var.application_name}-${var.envrionment}-ecs-cluster"
 }
+
+resource "aws_cloudwatch_log_group" "main" {
+  name = "${var.application_name}-log"
+
+  retention_in_days = 7
+
+  lifecycle {
+    create_before_destroy = true
+    prevent_destroy       = false
+  }
+}
+
 
 resource "aws_ecs_task_definition" "main" {
   family                   = "${var.application_name}-${var.envrionment}-task"
@@ -26,6 +32,14 @@ resource "aws_ecs_task_definition" "main" {
       containerPort = var.container_port
       hostPort      = var.container_port
     }]
+    logConfiguration = {
+      logDriver = "awslogs"
+      options = {
+        "awslogs-group"         = aws_cloudwatch_log_group.main.name
+        "awslogs-region"        = var.aws_region
+        "awslogs-stream-prefix" = "${var.application_name}-${var.envrionment}"
+      }
+    }
   }])
 }
 
