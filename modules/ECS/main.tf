@@ -14,7 +14,7 @@ resource "aws_cloudwatch_log_group" "main" {
 }
 
 resource "aws_iam_role" "execution_role" {
-  name = "ecsTaskExecutionRole"
+  name = "${var.application_name}-${var.envrionment}-ecs-execution-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
