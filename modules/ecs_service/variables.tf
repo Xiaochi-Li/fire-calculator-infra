@@ -12,7 +12,11 @@ variable "vpc_id" {
 variable "envrionment" {
   description = "The environment"
   type        = string
+}
 
+variable "subnet_count" {
+  description = "The number of subnets to create"
+  type        = number
 }
 
 variable "cluster_arn" {

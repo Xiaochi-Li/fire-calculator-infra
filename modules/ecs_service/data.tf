@@ -4,8 +4,7 @@ data "aws_subnets" "all" {
     values = [var.vpc_id]
   }
 }
-
 data "aws_subnet" "each" {
-  for_each = toset(data.aws_subnets.all.ids)
-  id       = each.value
+  count = var.subnet_count
+  id    = data.aws_subnets.all.ids[count.index]
 }

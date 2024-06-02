@@ -4,8 +4,8 @@ provider "aws" {
   default_tags {
     tags = {
       "Terraform" = "true"
-      application = var.application_name
-      envrionment = var.envrionment
+      application = local.application_name
+      envrionment = local.envrionment
     }
   }
 }

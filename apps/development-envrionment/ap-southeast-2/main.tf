@@ -30,4 +30,5 @@ module "ECS" {
   envrionment      = local.envrionment
   application_name = local.application_name
   vpc_ids          = module.VPC_Sydney.vpc_ids
+  depends_on       = [module.VPC_Sydney]
 }
