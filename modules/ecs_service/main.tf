@@ -1,5 +1,5 @@
 locals {
-  private_subnets = [for s in data.aws_subnet.each : s.id if !s.map_public_ip_on_launch]
+  private_app_subnets = [for s in data.aws_subnet.app : s.id if !s.map_public_ip_on_launch]
 }
 
 resource "aws_security_group" "ecs" {
@@ -12,6 +12,15 @@ resource "aws_security_group" "ecs" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["104.30.135.68/32"]
+    description = "Allow SSH from Sean personal IP"
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all traffic out"
   }
 }
 
@@ -25,7 +34,7 @@ resource "aws_ecs_service" "main" {
 
 
   network_configuration {
-    subnets          = local.private_subnets
+    subnets          = local.private_app_subnets
     security_groups  = [aws_security_group.ecs.id]
     assign_public_ip = true
   }
