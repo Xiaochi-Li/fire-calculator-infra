@@ -1,11 +1,12 @@
 locals {
-  private_app_subnets = [for s in data.aws_subnet.app : s.id if !s.map_public_ip_on_launch]
+  private_app_subnets = [for s in data.aws_subnet.app : s.id if strcontains(s.tags.Name, "sn-app")]
+  public_web_subnets  = [for s in data.aws_subnet.app : s.id if strcontains(s.tags.Name, "sn-web")]
 }
 
 resource "aws_security_group" "ecs" {
-  name        = "${var.application_name}-${var.envrionment}-sg-${var.index}"
+  name        = "${var.application_name}-${var.envrionment}-ecs-sg-${var.index}"
   vpc_id      = var.vpc_id
-  description = "Example security group"
+  description = "ECS security group"
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_all_out_ipv4" {
@@ -49,7 +50,16 @@ resource "aws_ecs_service" "main" {
     security_groups  = [aws_security_group.ecs.id]
     assign_public_ip = true
   }
-  # load_balancer {
-  # // Tobe add later
-  # }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.alb.arn
+    container_name   = var.container_name
+    container_port   = var.container_port
+  }
+  # The Amazon ECS service requires an explicit dependency on the Application
+  # Load Balancer listener rule and the Application Load Balancer listener. 
+  # This prevents the service from starting before the listener is ready.
+  depends_on = [aws_lb_listener.front_end]
 }
+
+

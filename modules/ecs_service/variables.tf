@@ -32,5 +32,14 @@ variable "task_definition_arn" {
 variable "index" {
   description = "The index of the ECS service"
   type        = number
+}
 
+variable "container_port" {
+  description = "The port the container listens on"
+  type        = number
+}
+
+variable "container_name" {
+  description = "The name of the container"
+  type        = string
 }

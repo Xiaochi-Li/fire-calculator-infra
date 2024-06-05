@@ -2,7 +2,7 @@ data "aws_subnets" "all" {
   filter {
     // only need to deploy ECS services in the app subnets
     name   = "tag:Name"
-    values = ["sn-app*"]
+    values = ["sn-app*", "sn-web"]
   }
 
   filter {

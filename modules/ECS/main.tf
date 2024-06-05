@@ -1,3 +1,7 @@
+locals {
+  container_name = "${var.application_name}-${var.envrionment}-container"
+}
+
 resource "aws_ecs_cluster" "main" {
   name = "${var.application_name}-${var.envrionment}-ecs-cluster"
 }
@@ -45,7 +49,7 @@ resource "aws_ecs_task_definition" "main" {
   execution_role_arn       = aws_iam_role.execution_role.arn
 
   container_definitions = jsonencode([{
-    name   = "${var.application_name}-${var.envrionment}-container"
+    name   = local.container_name
     image  = var.container_image
     memory = var.memory
     cpu    = var.cpu
@@ -73,8 +77,10 @@ module "ecs_service" {
   application_name    = var.application_name
   envrionment         = var.envrionment
   vpc_id              = var.vpc_ids[count.index]
+  container_port      = var.container_port
   cluster_arn         = aws_ecs_cluster.main.arn
   subnet_count        = 1
   task_definition_arn = aws_ecs_task_definition.main.arn
   index               = count.index
+  container_name      = local.container_name
 }
