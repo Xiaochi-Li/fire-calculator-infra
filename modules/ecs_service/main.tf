@@ -1,6 +1,5 @@
 locals {
   private_app_subnets = [for s in data.aws_subnet.app : s.id if strcontains(s.tags.Name, "sn-app")]
-  public_web_subnets  = [for s in data.aws_subnet.app : s.id if strcontains(s.tags.Name, "sn-web")]
 }
 
 resource "aws_security_group" "ecs" {
