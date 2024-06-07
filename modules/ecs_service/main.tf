@@ -26,13 +26,21 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_out_ipv6" {
   description       = "Allow all traffic out"
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_ssh_from_sean_ip" {
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh_from_seans_ip" {
   security_group_id = aws_security_group.ecs.id
   from_port         = 22
   to_port           = 22
   ip_protocol       = "tcp"
-  cidr_ipv4         = "104.30.135.68/32"
-  description       = "Allow SSH from Sean personal IP"
+
+  referenced_security_group_id = aws_security_group.alb.id
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_http_from_alb" {
+  security_group_id            = aws_security_group.ecs.id
+  from_port                    = var.container_port
+  to_port                      = var.container_port
+  ip_protocol                  = "tcp"
+  referenced_security_group_id = aws_security_group.alb.id
 }
 
 resource "aws_ecs_service" "main" {
