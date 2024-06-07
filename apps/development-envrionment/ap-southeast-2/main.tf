@@ -29,8 +29,8 @@ module "ECS" {
   container_image    = "xiaochilidevops/fire-calculator-api:latest"
   envrionment        = local.envrionment
   application_name   = local.application_name
-  private_subnet_ids = module.VPC_Sydney.private_subnet_ids
-  public_subnet_ids  = module.VPC_Sydney.public_subnet_ids
+  private_subnet_ids = module.VPC_Sydney.private_subnet_ids[0]
+  public_subnet_ids  = module.VPC_Sydney.public_subnet_ids[0]
   vpc_ids            = module.VPC_Sydney.vpc_ids
   depends_on         = [module.VPC_Sydney]
 }
