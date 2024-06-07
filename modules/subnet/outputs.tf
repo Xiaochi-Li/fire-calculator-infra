@@ -11,12 +11,12 @@ output "nat_eip" {
 
 output "private_subnet_ids" {
   description = "value of private subnets"
-  value       = local.private_subnets
+  value       = flatten(local.private_subnets)
 }
 
 output "public_subnet_ids" {
   description = "value of public subnets"
-  value       = local.public_subnets
+  value       = flatten(local.public_subnets)
 }
 
 
