@@ -83,4 +83,6 @@ module "ecs_service" {
   task_definition_arn = aws_ecs_task_definition.main.arn
   index               = count.index
   container_name      = local.container_name
+  private_subnet_ids  = var.private_subnet_ids
+  public_subnet_ids   = var.public_subnet_ids
 }

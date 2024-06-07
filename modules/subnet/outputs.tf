@@ -1,8 +1,3 @@
-output "public_subnets" {
-  description = "value of public subnets"
-  value       = local.public_subnets
-}
-
 output "public_route_table_id" {
   description = "value of public route table id"
   value       = aws_route_table.public[*].id
@@ -14,10 +9,16 @@ output "nat_eip" {
 }
 
 
-output "private_subnets" {
+output "private_subnet_ids" {
   description = "value of private subnets"
   value       = local.private_subnets
 }
+
+output "public_subnet_ids" {
+  description = "value of public subnets"
+  value       = local.public_subnets
+}
+
 
 output "private_route_table_id" {
   description = "value of private route table id"

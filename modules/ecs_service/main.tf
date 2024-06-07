@@ -1,5 +1,5 @@
 locals {
-  private_app_subnets = [for s in data.aws_subnet.app : s.id if strcontains(s.tags.Name, "sn-app")]
+  private_app_subnets = [for s in data.aws_subnet.private_subnets : s.id if strcontains(s.tags.Name, "sn-app")]
 }
 
 resource "aws_security_group" "ecs" {

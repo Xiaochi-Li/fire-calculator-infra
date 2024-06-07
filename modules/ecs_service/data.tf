@@ -1,17 +1,9 @@
-data "aws_subnets" "all" {
-  filter {
-    // only need to deploy ECS services in the app subnets
-    name   = "tag:Name"
-    values = ["sn-app*", "sn-web*"]
-  }
-
-  filter {
-    name   = "vpc-id"
-    values = [var.vpc_id]
-  }
+data "aws_subnet" "public_subnets" {
+  count = length(var.public_subnet_ids)
+  id    = var.public_subnet_ids[count.index]
 }
 
-data "aws_subnet" "app" {
-  count = var.subnet_count
-  id    = data.aws_subnets.all.ids[count.index]
+data "aws_subnet" "private_subnets" {
+  count = length(var.private_subnet_ids)
+  id    = var.private_subnet_ids[count.index]
 }

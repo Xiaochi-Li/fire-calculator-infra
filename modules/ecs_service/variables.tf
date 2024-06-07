@@ -43,3 +43,13 @@ variable "container_name" {
   description = "The name of the container"
   type        = string
 }
+
+variable "private_subnet_ids" {
+  description = "The private subnet IDs"
+  type        = list(string)
+}
+
+variable "public_subnet_ids" {
+  description = "The public subnet IDs"
+  type        = list(string)
+}

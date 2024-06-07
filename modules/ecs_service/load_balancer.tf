@@ -1,6 +1,4 @@
-locals {
-  public_web_subnets = [for s in data.aws_subnet.app : s.id if strcontains(s.tags.Name, "sn-web")]
-}
+
 
 resource "aws_security_group" "alb" {
   name        = "${var.application_name}-${var.envrionment}-alb-sg-${var.index}"
@@ -36,7 +34,7 @@ resource "aws_lb" "main" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
-  subnets            = local.public_web_subnets
+  subnets            = data.aws_subnet.public_subnets
 }
 
 resource "aws_lb_target_group" "alb" {
