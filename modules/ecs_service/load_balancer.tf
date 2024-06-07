@@ -19,14 +19,14 @@ resource "aws_security_group" "alb" {
     protocol        = "tcp"
     security_groups = [aws_security_group.ecs.id]
   }
+}
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow all traffic out"
-  }
+resource "aws_vpc_security_group_egress_rule" "allow_to_ecs" {
+  security_group_id            = aws_security_group.alb.id
+  from_port                    = var.container_port
+  to_port                      = var.container_port
+  ip_protocol                  = "tcp"
+  referenced_security_group_id = aws_security_group.ecs.id
 }
 
 resource "aws_lb" "main" {
