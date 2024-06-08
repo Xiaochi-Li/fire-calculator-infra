@@ -53,6 +53,13 @@ resource "aws_ecs_task_definition" "main" {
     image  = var.container_image
     memory = var.memory
     cpu    = var.cpu
+    healthcheck = {
+      command      = ["CMD-SHELL", "curl -f http://localhost:${var.container_port}/financial-profile/health-check || exit 1"]
+      interval     = 30
+      timeout      = 5
+      retries      = 3
+      start_period = 60
+    }
     portMappings = [{
       // When networkMode=awsvpc, the host ports and container ports in port mappings must match.
       containerPort = var.container_port
