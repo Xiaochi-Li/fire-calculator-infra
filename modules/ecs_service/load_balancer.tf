@@ -4,21 +4,22 @@ resource "aws_security_group" "alb" {
   name        = "${var.application_name}-${var.envrionment}-alb-sg-${var.index}"
   vpc_id      = var.vpc_id
   description = "ECS security group"
+}
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["104.30.135.68/32"]
-    description = "Allow SSH from Sean personal IP"
-  }
+resource "aws_vpc_security_group_ingress_rule" "allow_all_to_container_port" {
+  security_group_id = aws_security_group.alb.id
+  from_port         = var.container_port
+  to_port           = var.container_port
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "0.0.0.0/0"
+}
 
-  ingress {
-    from_port       = 80
-    to_port         = var.container_port
-    protocol        = "tcp"
-    security_groups = [aws_security_group.ecs.id]
-  }
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh_from_sean_ip" {
+  security_group_id = aws_security_group.alb.id
+  from_port         = 22
+  to_port           = 22
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "104.30.135.68/32"
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_to_ecs" {
