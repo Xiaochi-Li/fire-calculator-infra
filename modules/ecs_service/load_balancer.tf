@@ -31,7 +31,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_to_ecs" {
 }
 
 resource "aws_lb" "main" {
-  name               = "main"
+  name               = "${var.application_name}-${var.envrionment}-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
@@ -39,7 +39,7 @@ resource "aws_lb" "main" {
 }
 
 resource "aws_lb_target_group" "alb" {
-  name        = "main"
+  name        = "${var.application_name}-${var.envrionment}-alb-tg"
   port        = var.container_port
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
