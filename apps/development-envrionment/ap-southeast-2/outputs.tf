@@ -8,12 +8,12 @@ output "vpc_ids" {
   value       = module.VPC_Sydney.vpc_ids
 }
 
-output "public_subnets" {
+output "public_subnet_ids" {
   description = "value of public subnets"
-  value       = module.VPC_Sydney.public_subnets
+  value       = module.VPC_Sydney.public_subnet_ids
 }
 
-output "private_subnets" {
+output "private_subnet_ids" {
   description = "value of private subnets"
-  value       = module.VPC_Sydney.private_subnets
+  value       = module.VPC_Sydney.private_subnet_ids
 }

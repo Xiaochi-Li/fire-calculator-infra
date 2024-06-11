@@ -13,14 +13,14 @@ output "aws_internet_gateway_id" {
   value       = aws_internet_gateway.main[*].id
 }
 
-output "public_subnets" {
+output "public_subnet_ids" {
   description = "value of public subnets"
-  value       = module.subnets[*].public_subnets
+  value       = module.subnets[*].public_subnet_ids
 }
 
-output "private_subnets" {
+output "private_subnet_ids" {
   description = "value of private subnets"
-  value       = module.subnets[*].private_subnets
+  value       = module.subnets[*].private_subnet_ids
 }
 
 output "nat_gateway_id" {

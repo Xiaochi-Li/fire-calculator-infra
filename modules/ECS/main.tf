@@ -1,3 +1,7 @@
+locals {
+  container_name = "${var.application_name}-${var.envrionment}-container"
+}
+
 resource "aws_ecs_cluster" "main" {
   name = "${var.application_name}-${var.envrionment}-ecs-cluster"
 }
@@ -45,10 +49,17 @@ resource "aws_ecs_task_definition" "main" {
   execution_role_arn       = aws_iam_role.execution_role.arn
 
   container_definitions = jsonencode([{
-    name   = "${var.application_name}-${var.envrionment}-container"
+    name   = local.container_name
     image  = var.container_image
     memory = var.memory
     cpu    = var.cpu
+    healthcheck = {
+      command      = ["CMD-SHELL", "curl -f http://localhost:${var.container_port}/financial-profile/health-check || exit 1"]
+      interval     = 30
+      timeout      = 5
+      retries      = 3
+      start_period = 60
+    }
     portMappings = [{
       // When networkMode=awsvpc, the host ports and container ports in port mappings must match.
       containerPort = var.container_port
@@ -73,8 +84,12 @@ module "ecs_service" {
   application_name    = var.application_name
   envrionment         = var.envrionment
   vpc_id              = var.vpc_ids[count.index]
+  container_port      = var.container_port
   cluster_arn         = aws_ecs_cluster.main.arn
   subnet_count        = 1
   task_definition_arn = aws_ecs_task_definition.main.arn
   index               = count.index
+  container_name      = local.container_name
+  private_subnet_ids  = var.private_subnet_ids
+  public_subnet_ids   = var.public_subnet_ids
 }

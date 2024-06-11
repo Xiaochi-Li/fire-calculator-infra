@@ -1,8 +1,9 @@
 locals {
-  public_subnet = [for sn in aws_subnet.main : sn.id if sn.map_public_ip_on_launch][0]
+  public_subnets = [for sn in aws_subnet.main : sn.id if sn.map_public_ip_on_launch]
 }
 
 resource "aws_route_table" "public" {
+  count  = length(local.public_subnets)
   vpc_id = var.vpc_id
 
   route {
@@ -21,23 +22,26 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table_association" "public" {
-  subnet_id      = local.public_subnet
-  route_table_id = aws_route_table.public.id
+  count          = length(local.public_subnets)
+  subnet_id      = local.public_subnets[count.index]
+  route_table_id = aws_route_table.public[count.index].id
 }
 
 resource "aws_eip" "nat_eip" {
+  count  = length(var.availability_zones)
   domain = "vpc"
 
   tags = {
-    Name = "nat-eip-${var.application_name}-${var.envrionment}-${var.aws_region}"
+    Name = "nat-eip-${var.application_name}-${var.envrionment}-${var.availability_zones[count.index]}"
   }
 }
 
 resource "aws_nat_gateway" "main" {
-  subnet_id     = local.public_subnet
-  allocation_id = aws_eip.nat_eip.id
+  count         = length(var.availability_zones)
+  subnet_id     = local.public_subnets[count.index]
+  allocation_id = aws_eip.nat_eip[count.index].id
 
   tags = {
-    Name = "nat-${var.application_name}-${var.envrionment}-${var.aws_region}"
+    Name = "nat-${var.application_name}-${var.envrionment}-${var.aws_region}-${count.index}"
   }
 }

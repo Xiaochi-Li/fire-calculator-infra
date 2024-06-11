@@ -18,9 +18,9 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "availability_zone" {
+variable "availability_zones" {
   description = "The availability zone to deploy the Subnets"
-  type        = string
+  type        = list(string)
 }
 
 variable "internet_gateway_id" {
