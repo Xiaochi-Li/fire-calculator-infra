@@ -10,3 +10,6 @@ In each AZ, 2 `/16` VPCs are reserved. This totals 48 VPCs across 4 AWS accounts
 | ~ | ap-southeast-4 | a | 11.19.0./16 |
 | ~ | ~ | b | 11.20.0.0/16 |
 | ~ | ~ | c | 11.21.0.0/16 |
+
+# Infrastructure Diagram
+![Alt text](/img/infra-diagram.png)
