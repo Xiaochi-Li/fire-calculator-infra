@@ -23,14 +23,17 @@ resource "aws_db_parameter_group" "main" {
 }
 
 resource "aws_db_instance" "main" {
-  identifier             = "main"
-  instance_class         = "db.t3.micro"
-  allocated_storage      = 5
-  engine                 = data.aws_rds_engine_version.main.engine
-  engine_version         = data.aws_rds_engine_version.main.version
-  username               = var.db_username
-  password               = var.db_password
-  db_subnet_group_name   = aws_db_subnet_group.main.name
-  vpc_security_group_ids = [aws_security_group.main.id]
-  parameter_group_name   = aws_db_parameter_group.main.name
+  identifier              = "main"
+  instance_class          = "db.t3.micro"
+  allocated_storage       = 5
+  engine                  = data.aws_rds_engine_version.main.engine
+  engine_version          = data.aws_rds_engine_version.main.version
+  username                = var.db_username
+  password                = var.db_password
+  db_subnet_group_name    = aws_db_subnet_group.main.name
+  vpc_security_group_ids  = [aws_security_group.main.id]
+  parameter_group_name    = aws_db_parameter_group.main.name
+  skip_final_snapshot     = true
+  backup_retention_period = 0
+  apply_immediately       = true
 }
