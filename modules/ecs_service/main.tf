@@ -46,10 +46,11 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http_from_alb" {
 resource "aws_ecs_service" "main" {
   name = "${var.application_name}-${var.envrionment}-service"
 
-  cluster         = var.cluster_arn
-  task_definition = var.task_definition_arn
-  launch_type     = "FARGATE"
-  desired_count   = 1
+  cluster              = var.cluster_arn
+  task_definition      = var.task_definition_arn
+  launch_type          = "FARGATE"
+  desired_count        = 1
+  force_new_deployment = true
 
 
   network_configuration {
