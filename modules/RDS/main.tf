@@ -23,7 +23,7 @@ resource "aws_db_parameter_group" "main" {
 }
 
 resource "aws_db_instance" "main" {
-  identifier              = "main"
+  identifier              = "${var.application_name}-${var.envrionment}-db-instance"
   instance_class          = "db.t3.micro"
   allocated_storage       = 5
   engine                  = data.aws_rds_engine_version.main.engine
