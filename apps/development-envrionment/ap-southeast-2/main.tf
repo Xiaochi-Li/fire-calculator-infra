@@ -19,19 +19,6 @@ module "VPC_Sydney" {
   vpc_cidr_blocks  = local.vpc_cidr_blocks
 }
 
-module "RDS" {
-  count              = length(module.VPC_Sydney.vpc_ids)
-  source             = "../../../modules/RDS"
-  db_password        = var.db_password
-  private_subnet_ids = module.VPC_Sydney.private_subnet_ids[0]
-  db_username        = var.db_username
-  envrionment        = local.envrionment
-  application_name   = local.application_name
-
-  vpc_id     = module.VPC_Sydney.vpc_ids[count.index]
-  depends_on = [module.VPC_Sydney]
-}
-
 module "ECS" {
   source = "../../../modules/ECS"
 
@@ -45,5 +32,19 @@ module "ECS" {
   private_subnet_ids = module.VPC_Sydney.private_subnet_ids[0]
   public_subnet_ids  = module.VPC_Sydney.public_subnet_ids[0]
   vpc_ids            = module.VPC_Sydney.vpc_ids
-  depends_on         = [module.VPC_Sydney, module.RDS]
+  depends_on         = [module.VPC_Sydney]
+}
+
+module "RDS" {
+  count              = length(module.VPC_Sydney.vpc_ids)
+  source             = "../../../modules/RDS"
+  db_password        = var.db_password
+  private_subnet_ids = module.VPC_Sydney.private_subnet_ids[0]
+  db_username        = var.db_username
+  envrionment        = local.envrionment
+  application_name   = local.application_name
+  ecs_sg_ids         = module.ECS.ecs_sg_ids
+
+  vpc_id     = module.VPC_Sydney.vpc_ids[count.index]
+  depends_on = [module.VPC_Sydney, module.ECS]
 }
