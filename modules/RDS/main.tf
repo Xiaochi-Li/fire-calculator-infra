@@ -39,6 +39,7 @@ resource "aws_db_instance" "main" {
   engine                  = data.aws_rds_engine_version.main.engine
   engine_version          = data.aws_rds_engine_version.main.version
   username                = var.db_username
+  db_name                 = "fire-calculator"
   password                = var.db_password
   db_subnet_group_name    = aws_db_subnet_group.main.name
   vpc_security_group_ids  = [aws_security_group.rds.id]
